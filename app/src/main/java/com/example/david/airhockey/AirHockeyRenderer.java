@@ -40,7 +40,7 @@ public class AirHockeyRenderer implements GLSurfaceView.Renderer {
     private final FloatBuffer vertexData;
     private final Context context;
     private int program;
-    private static final String U_COLOR = "u_color";
+    private static final String U_COLOR = "u_Color";
     private int uColorLocation;
     private static final String A_POSITION = "a_Position";
     private int aPositionLocation;
