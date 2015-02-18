@@ -38,7 +38,7 @@ public class AirHockeyRenderer implements GLSurfaceView.Renderer {
     private static final int POSITION_COMPONENT_COUNT = 2;
     private static final int BYTES_PER_FLOAT = 4;
     private final FloatBuffer vertexData;
-    private final Context context;
+    private final Context mContext;
     private int program;
     private static final String U_COLOR = "u_Color";
     private int uColorLocation;
@@ -47,7 +47,7 @@ public class AirHockeyRenderer implements GLSurfaceView.Renderer {
 
     public AirHockeyRenderer(Context context)
     {
-        this.context = context;
+        this.mContext = context;
         float [] tableVertices = {
 
                 // Triangle 1
@@ -70,10 +70,10 @@ public class AirHockeyRenderer implements GLSurfaceView.Renderer {
         };
 
         vertexData = ByteBuffer
-                .allocateDirect(tableVertices
-                .length * BYTES_PER_FLOAT)
+                .allocateDirect(tableVertices.length * BYTES_PER_FLOAT)
                 .order(ByteOrder.nativeOrder())
                 .asFloatBuffer();
+        vertexData.put(tableVertices);
 
     }
 
@@ -81,8 +81,8 @@ public class AirHockeyRenderer implements GLSurfaceView.Renderer {
     public void onSurfaceCreated(GL10 gl, EGLConfig config) {
         glClearColor(0f, 0f, 0f, 0f);
 
-        String vertexShaderSource = TextResourceReader.readTextFileFromResource(context, R.raw.simple_vertex_shader);
-        String fragmentShaderSource = TextResourceReader.readTextFileFromResource(context, R.raw.simple_fragment_shader);
+        String vertexShaderSource = TextResourceReader.readTextFileFromResource(mContext, R.raw.simple_vertex_shader);
+        String fragmentShaderSource = TextResourceReader.readTextFileFromResource(mContext, R.raw.simple_fragment_shader);
 
         int vertexShader = ShaderHelper.compileVertexShader(vertexShaderSource);
         int fragmentShader = ShaderHelper.compileFragmentShader(fragmentShaderSource);
@@ -111,6 +111,7 @@ public class AirHockeyRenderer implements GLSurfaceView.Renderer {
     @Override
     public void onDrawFrame(GL10 gl) {
         // Clear the rendering surface
+
         glClear(GL_COLOR_BUFFER_BIT);
 
         glUniform4f(uColorLocation,1.0f,1.0f,1.0f,1.0f);
@@ -121,5 +122,7 @@ public class AirHockeyRenderer implements GLSurfaceView.Renderer {
         glDrawArrays(GL_POINTS, 8, 1);
         glUniform4f(uColorLocation,1.0f,0.0f,0.0f,1.0f);
         glDrawArrays(GL_POINTS, 9, 1);
+
+
     }
 }

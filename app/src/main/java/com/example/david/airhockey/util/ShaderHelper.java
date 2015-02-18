@@ -36,8 +36,7 @@ public class ShaderHelper {
 
         if(LoggerConfig.ON){
             // Print the shader info log to the android log output.
-            Log.v(TAG, "Results of compiling source:"+"\n"+shaderCode+"\n"
-                    + glGetShaderInfoLog(shaderObjectId));
+            Log.v(TAG, "Results of compiling source:"+ glGetShaderInfoLog(shaderObjectId));
         }
         if(compileStatus[0]==0){
             // if it failed, delete the shader object.
