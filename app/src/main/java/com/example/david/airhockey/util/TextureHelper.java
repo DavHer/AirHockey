@@ -5,11 +5,17 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.Log;
 
+import static android.opengl.GLES20.GL_LINEAR;
+import static android.opengl.GLES20.GL_LINEAR_MIPMAP_LINEAR;
+import static android.opengl.GLES20.GL_TEXTURE;
 import static android.opengl.GLES20.GL_TEXTURE2;
 import static android.opengl.GLES20.GL_TEXTURE_2D;
+import static android.opengl.GLES20.GL_TEXTURE_MAG_FILTER;
+import static android.opengl.GLES20.GL_TEXTURE_MIN_FILTER;
 import static android.opengl.GLES20.glBindTexture;
 import static android.opengl.GLES20.glDeleteTextures;
 import static android.opengl.GLES20.glGenTextures;
+import static android.opengl.GLES20.glTexParameteri;
 
 /**
  * Created by david on 24/02/15.
@@ -43,6 +49,8 @@ public class TextureHelper {
         }
 
         glBindTexture(GL_TEXTURE_2D, textureObjectIds[0]);
+        glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR_MIPMAP_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR);
 
         return textureObjectIds[0];
     }
