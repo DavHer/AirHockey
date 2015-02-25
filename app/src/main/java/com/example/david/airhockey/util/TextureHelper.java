@@ -15,7 +15,9 @@ import static android.opengl.GLES20.GL_TEXTURE_MIN_FILTER;
 import static android.opengl.GLES20.glBindTexture;
 import static android.opengl.GLES20.glDeleteTextures;
 import static android.opengl.GLES20.glGenTextures;
+import static android.opengl.GLES20.glGenerateMipmap;
 import static android.opengl.GLES20.glTexParameteri;
+import static android.opengl.GLUtils.texImage2D;
 
 /**
  * Created by david on 24/02/15.
@@ -51,7 +53,12 @@ public class TextureHelper {
         glBindTexture(GL_TEXTURE_2D, textureObjectIds[0]);
         glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR_MIPMAP_LINEAR);
         glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR);
+        texImage2D(GL_TEXTURE_2D,0,bitmap,0);
 
+        bitmap.recycle();
+
+        glGenerateMipmap(GL_TEXTURE_2D);
+        glBindTexture(GL_TEXTURE_2D,0);
         return textureObjectIds[0];
     }
 }
