@@ -11,6 +11,7 @@ import com.example.david.airhockey.objects.Puck;
 import com.example.david.airhockey.objects.Table;
 import com.example.david.airhockey.programs.ColorShaderProgram;
 import com.example.david.airhockey.programs.TextureShaderProgram;
+import com.example.david.airhockey.util.Geometry;
 import com.example.david.airhockey.util.LoggerConfig;
 import com.example.david.airhockey.util.MatrixHelper;
 import com.example.david.airhockey.util.ShaderHelper;
@@ -71,6 +72,9 @@ public class AirHockeyRenderer implements GLSurfaceView.Renderer {
     private final float[] viewProjectionMatrix = new float[16];
     private final float[] modelViewProjectionMatrix = new float[16];
 
+    private boolean malletPressed = false;
+    private Geometry.Point blueMalletPosition;
+
     public AirHockeyRenderer(Context context)
     {
         this.mContext = context;
@@ -90,6 +94,7 @@ public class AirHockeyRenderer implements GLSurfaceView.Renderer {
 
         texture = TextureHelper.loadTexture(mContext,R.drawable.air_hockey_surface);
 
+        blueMalletPosition = new Geometry.Point(0f, mallet.height / 2f, 0.4f);
     }
 
     @Override
@@ -155,9 +160,17 @@ public class AirHockeyRenderer implements GLSurfaceView.Renderer {
 
     public void handleTouchPress(float normalizedX, float normalizedY){
         Log.d("TOUCH", "press ("+normalizedX+","+normalizedY+")");
+
+        Ray ray = convertNormalized2DPointToRay(normalizedX, normalizedY);
+
+        //Now test if this ray intersects with the mallet by creating a
+        // bounding sphere that wraps the mallet
+        Sphere malletBoundingSphere = new Sphere(new Geometry.Point(blueMalletPosition.x,blueMalletPosition.y,
+                                                                    blueMalletPosition.z), mallet.height/2f);
+
     }
 
     public void handleTouchDrag(float normalizedX, float normalizedY){
-        Log.d("TOUCH", "drag ("+normalizedX+","+normalizedY+")");
+        Log.d("TOUCH", "drag (" + normalizedX + "," + normalizedY + ")");
     }
 }
