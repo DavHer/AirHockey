@@ -8,6 +8,8 @@ import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
+import android.view.View;
 import android.widget.Toast;
 
 
@@ -15,6 +17,7 @@ public class MainActivity extends ActionBarActivity {
 
     private GLSurfaceView glSurfaceView;
     private boolean rendererSet = false;
+    final AirHockeyRenderer airHockeyRenderer = new AirHockeyRenderer(this);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,8 +33,40 @@ public class MainActivity extends ActionBarActivity {
             glSurfaceView.setEGLContextClientVersion(2);
 
             // Assign our renderer
-            glSurfaceView.setRenderer(new AirHockeyRenderer(this));
+            glSurfaceView.setRenderer(airHockeyRenderer);
             rendererSet = true;
+
+            glSurfaceView.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    if(event!=null){
+                        //Convert touch coordinates into normalized device coordinates
+                        //, keeping in mind that Android's Y coordinate are inverted.
+                        final float normalizedX = (event.getX() / (float)v.getWidth()) * 2 -1;
+                        final float normalizedY = - ((event.getY() / (float) v.getHeight()) * 2 -1);
+                        if(event.getAction() == MotionEvent.ACTION_DOWN){
+                            glSurfaceView.queueEvent(new Runnable() {
+                                @Override
+                                public void run() {
+                                    airHockeyRenderer.handleTouchPress(normalizedX, normalizedY);
+                                }
+                            });
+                        }
+                        else if(event.getAction() == MotionEvent.ACTION_MOVE){
+                            glSurfaceView.queueEvent(new Runnable() {
+                                @Override
+                                public void run() {
+                                    airHockeyRenderer.handleTouchDrag(normalizedX, normalizedY);
+                                }
+                            });
+                        }
+                        return true;
+                    }
+                    else{
+                        return false;
+                    }
+                }
+            });
 
             setContentView(glSurfaceView);
         }
