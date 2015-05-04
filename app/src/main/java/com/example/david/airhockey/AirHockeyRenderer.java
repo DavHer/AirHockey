@@ -136,7 +136,7 @@ public class AirHockeyRenderer implements GLSurfaceView.Renderer {
         table.draw();
 
         //Draw mallets
-        positionObjectInScene(0f, mallet.height / 2f, -0.4f);
+        positionObjectInScene(blueMalletPosition.x, blueMalletPosition.y, blueMalletPosition.z);
         colorShaderProgram.useProgram();
         colorShaderProgram.setUniforms(modelViewProjectionMatrix, 1f, 0f, 0f);
         mallet.bindData(colorShaderProgram);
@@ -192,7 +192,7 @@ public class AirHockeyRenderer implements GLSurfaceView.Renderer {
         if(malletPressed){
             Geometry.Ray ray = convertNormalized2DPointToRay(normalizedX,normalizedY);
             //Define a plane representing our air hockey table.
-            Plane plane = new Plane(new Geometry.Point(0,0,0), new Geometry.Vector(0,1,0));
+            Geometry.Plane plane = new Geometry.Plane(new Geometry.Point(0,0,0), new Geometry.Vector(0,1,0));
             //Find out where the touched point intersects the plane
             //representing out table. We will move the mallet along this plane.
             Geometry.Point touchedPoint = Geometry.intersectionPoint(ray,plane);
